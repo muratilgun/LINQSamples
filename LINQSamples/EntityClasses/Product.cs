@@ -2,7 +2,7 @@
 {
     public partial class Product
     {
-        public int ProductId { get; set; }
+        public int ProductID { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public decimal StandardCost { get; set; }
