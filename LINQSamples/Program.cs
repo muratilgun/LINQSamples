@@ -8,9 +8,9 @@ namespace LINQSamples
         static void Main(string[] args)
         {
             //Instantiate the ViewModel
-            SamplesViewModel vm = new SamplesViewModel { UseQuerySyntax = true};
+            SamplesViewModel vm = new SamplesViewModel { UseQuerySyntax = false};
             //Call a sample method
-            vm.GetAllLooping();
+            vm.GetSingleColumn();
             
             // Display Product Collection
 

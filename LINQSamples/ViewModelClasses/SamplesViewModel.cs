@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using LINQSamples.EntityClasses;
 using LINQSamples.RepositoryClasses;
 
@@ -46,7 +48,25 @@ namespace LINQSamples.ViewModelClasses
 
         public void GetSingleColumn()
         {
+            StringBuilder sb = new StringBuilder(1024);
+            List<string> list = new List<string>();
+            if (UseQuerySyntax)
+            {
+                list.AddRange(from prod in Products select  prod.Name);
+            }
+            else
+            {
+                list.AddRange(Products.Select(prod => prod.Name));
+            }
 
+            foreach (string item in list)
+            {
+                sb.AppendLine(item);
+            }
+
+            ResultText = $"Total Products: {list.Count}" + Environment.NewLine + sb.ToString();
+            Products.Clear();
+            
         }
 
     }
