@@ -16,6 +16,17 @@ namespace LINQSamples.ViewModelClasses
         public List<Product> Products { get; set; }
         public string ResultText { get; set; }
 
+        public void GetAllLooping()
+        {
+            List<Product> list = new List<Product>();
+            foreach (Product item in Products)
+            {
+                list.Add(item);
+            }
+            ResultText = $"Total Products: {list.Count}";
+
+        }
+
         public void GetAll()
         {
             List<Product> list;
