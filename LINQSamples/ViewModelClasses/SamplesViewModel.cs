@@ -88,7 +88,6 @@ namespace LINQSamples.ViewModelClasses
                 }).ToList();
             }
         }
-
         public void AnonymousClass()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -128,6 +127,21 @@ namespace LINQSamples.ViewModelClasses
             ResultText = sb.ToString();
             Products.Clear();
         }
+
+        public void OrderBy()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name select prod).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+
 
     }
 }
