@@ -153,5 +153,21 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
+
+        public void OrderByTwoFields()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Color descending, prod.Name select prod).ToList();
+
+            }
+            else
+            {
+                Products = Products.OrderByDescending(prod => prod.Color).ThenBy(prod => prod.Name).ToList();
+
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
     }
 }
