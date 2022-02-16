@@ -127,7 +127,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = sb.ToString();
             Products.Clear();
         }
-
         public void OrderBy()
         {
             if (UseQuerySyntax)
@@ -141,7 +140,18 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
+        public void OrderByDescending()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name descending select prod).ToList();
+            }
+            else
+            {
+                Products = Products.OrderByDescending(prod => prod.Name).ToList();
+            }
 
-
+            ResultText = $"Total Products: {Products.Count}";
+        }
     }
 }
