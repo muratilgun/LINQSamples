@@ -28,7 +28,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Total Products: {list.Count}";
 
         }
-
         public void GetAll()
         {
             List<Product> list;
@@ -45,7 +44,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {list.Count}";
         }
-
         public void GetSingleColumn()
         {
             StringBuilder sb = new StringBuilder(1024);
@@ -68,8 +66,6 @@ namespace LINQSamples.ViewModelClasses
             Products.Clear();
             
         }
-
-
         public void GetSpecificColumns()
         {
             if (UseQuerySyntax)
@@ -92,5 +88,46 @@ namespace LINQSamples.ViewModelClasses
                 }).ToList();
             }
         }
+
+        public void AnonymousClass()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            if (UseQuerySyntax)
+            {
+                var products = (from prod in Products
+                    select new
+                    {
+                        Identifier = prod.ProductID,
+                        ProductName = prod.Name,
+                        ProductSize = prod.Size
+                    });
+
+                foreach (var prod in products)
+                {
+                    sb.AppendLine($"Product ID: {prod.Identifier}");
+                    sb.AppendLine($"   Product Name: {prod.ProductName}");
+                    sb.AppendLine($"   Product Size: {prod.ProductSize}");
+                }
+            }
+            else
+            {
+                var products = Products.Select(prod => new
+                {
+                    Identifier = prod.ProductID,
+                    ProductName = prod.Name,
+                    ProductSize =prod.Size
+                });
+                foreach (var prod in products)
+                {
+                    sb.AppendLine($"Product ID: {prod.Identifier}");
+                    sb.AppendLine($"   Product Name: {prod.ProductName}");
+                    sb.AppendLine($"   Product Size: {prod.ProductSize}");
+                }
+            }
+
+            ResultText = sb.ToString();
+            Products.Clear();
+        }
+
     }
 }
