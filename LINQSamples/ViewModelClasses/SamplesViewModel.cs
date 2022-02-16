@@ -69,5 +69,28 @@ namespace LINQSamples.ViewModelClasses
             
         }
 
+
+        public void GetSpecificColumns()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products
+                    select new Product
+                    {
+                        ProductID = prod.ProductID,
+                        Name = prod.Name,
+                        Size = prod.Size
+                    }).ToList();
+            }
+            else
+            {
+                Products = Products.Select(prod => new Product
+                {
+                    ProductID = prod.ProductID,
+                    Name = prod.Name,
+                    Size = prod.Size
+                }).ToList();
+            }
+        }
     }
 }
