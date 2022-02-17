@@ -10,6 +10,8 @@ namespace LINQSamples.EntityClasses
         public decimal StandardCost { get; set; }
         public decimal ListPrice { get; set; }
         public string Size { get; set; }
+        public int? NameLength { get; set; }
+        public decimal? TotalSales { get; set; }
         #region ToString Override 
         public override string ToString()
         {
@@ -21,7 +23,7 @@ namespace LINQSamples.EntityClasses
             sb.AppendLine($"   Size: {(Size ?? "n/a")}");
             sb.Append($"   Cost: {StandardCost:c}");
             sb.AppendLine($"   Price: {ListPrice:c}");
-
+            sb.Append($"   Name Length : {NameLength}");
             return sb.ToString();
         }
         #endregion

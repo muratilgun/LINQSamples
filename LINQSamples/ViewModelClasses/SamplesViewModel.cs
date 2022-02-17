@@ -309,7 +309,6 @@ namespace LINQSamples.ViewModelClasses
             }
             Products.Clear();
         }
-
         public void Single()
         {
             int search = 706;
@@ -369,6 +368,19 @@ namespace LINQSamples.ViewModelClasses
             Products.Clear();
         }
 
+        public void ForEach()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products let tmp = prod.NameLength = prod.Name.Length select prod).ToList();
+            }
+            else
+            {
+                Products.ForEach(prod => prod.NameLength = prod.Name.Length);
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
 
     }
 }
