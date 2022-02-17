@@ -153,7 +153,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
-
         public void OrderByTwoFields()
         {
             if (UseQuerySyntax)
@@ -165,6 +164,23 @@ namespace LINQSamples.ViewModelClasses
             {
                 Products = Products.OrderByDescending(prod => prod.Color).ThenBy(prod => prod.Name).ToList();
 
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+
+        public void WhereExpression()
+        {
+            string search = "L";
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products
+                    where prod.Name.StartsWith(search)
+                    select prod).ToList();
+            }
+            else
+            {
+                Products = Products.Where(prod => prod.Name.StartsWith(search)).ToList();
             }
 
             ResultText = $"Total Products: {Products.Count}";
