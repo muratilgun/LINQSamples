@@ -201,5 +201,45 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
+        public void WhereExtensionMethod()
+        {
+            string search = "Red";
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products select prod).ByColor(search).ToList();
+            }
+            else
+            {
+                Products = Products.ByColor(search).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+
+        }
+
+        public void First()
+        {
+            string search = "Red";
+            Product value;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    value = (from prod in Products select prod).First(prod => prod.Color == search);
+                }
+                else
+                {
+                    value = Products.First(prod => prod.Color == search);
+                }
+
+                ResultText = $"Found: {value}";
+            }
+            catch
+            {
+                ResultText = "Not Found";
+            }
+            Products.Clear();
+        }
+
     }
 }

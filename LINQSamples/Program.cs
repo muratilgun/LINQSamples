@@ -10,7 +10,7 @@ namespace LINQSamples
             //Instantiate the ViewModel
             SamplesViewModel vm = new SamplesViewModel { UseQuerySyntax = false};
             //Call a sample method
-            vm.WhereTwoFields();
+            vm.First();
             
             // Display Product Collection
 
