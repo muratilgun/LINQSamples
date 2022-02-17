@@ -262,31 +262,30 @@ namespace LINQSamples.ViewModelClasses
             }
             Products.Clear();
         }
-
         public void Last()
         {
             string search = "Red";
             Product value;
-            if (UseQuerySyntax)
+            try
             {
-                value = (from prod in Products select prod).Last(prod => prod.Color == search);
-            }
-            else
-            {
-                value = Products.Last(prod => prod.Color == search);
-            }
+                if (UseQuerySyntax)
+                {
+                    value = (from prod in Products select prod).Last(prod => prod.Color == search);
+                }
+                else
+                {
+                    value = Products.Last(prod => prod.Color == search);
+                }
+                ResultText = $"Found : {value}";
 
-            if (value == null)
+            }
+            catch 
             {
                 ResultText = "Not Found";
-            }
-            else
-            {
-                ResultText = $"Found : {value}";
+
             }
             Products.Clear();
         }
-
         public void LastOrDefault()
         {
             string search = "Red";
@@ -310,6 +309,66 @@ namespace LINQSamples.ViewModelClasses
             }
             Products.Clear();
         }
+
+        public void Single()
+        {
+            int search = 706;
+            Product value;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    value = (from prod in Products select prod).Single(prod => prod.ProductID == search);
+                }
+                else
+                {
+                    value = Products.Single(prod => prod.ProductID == search);
+                }
+                ResultText = $"Found: {value}";
+
+            }
+            catch 
+            {
+
+                ResultText = "Not Found, or multiple elements found";
+
+            }
+
+            Products.Clear();
+        }
+        public void SingleOrDefault()
+        {
+            int search = 706;
+            Product value;
+            try
+            {
+                if (UseQuerySyntax)
+                {
+                    value = (from prod in Products select prod).SingleOrDefault(prod => prod.ProductID == search);
+                }
+                else
+                {
+                    value = Products.SingleOrDefault(prod => prod.ProductID == search);
+                }
+
+                if (value == null)
+                {
+                    ResultText = "Not Found";
+                }
+                else
+                {
+                    ResultText = $"Found : {value}";
+                }
+            }
+            catch 
+            {
+
+                ResultText = "Multiple elements found";
+
+            }
+            Products.Clear();
+        }
+
 
     }
 }
