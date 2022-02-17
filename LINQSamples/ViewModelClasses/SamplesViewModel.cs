@@ -239,7 +239,6 @@ namespace LINQSamples.ViewModelClasses
             }
             Products.Clear();
         }
-
         public void FirstOrDefault()
         {
             string search = "Red";
@@ -251,6 +250,54 @@ namespace LINQSamples.ViewModelClasses
             else
             {
                 value = Products.FirstOrDefault(prod => prod.Color == search);
+            }
+
+            if (value == null)
+            {
+                ResultText = "Not Found";
+            }
+            else
+            {
+                ResultText = $"Found : {value}";
+            }
+            Products.Clear();
+        }
+
+        public void Last()
+        {
+            string search = "Red";
+            Product value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Last(prod => prod.Color == search);
+            }
+            else
+            {
+                value = Products.Last(prod => prod.Color == search);
+            }
+
+            if (value == null)
+            {
+                ResultText = "Not Found";
+            }
+            else
+            {
+                ResultText = $"Found : {value}";
+            }
+            Products.Clear();
+        }
+
+        public void LastOrDefault()
+        {
+            string search = "Red";
+            Product value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).LastOrDefault(prod => prod.Color == search);
+            }
+            else
+            {
+                value = Products.LastOrDefault(prod => prod.Color == search);
             }
 
             if (value == null)
