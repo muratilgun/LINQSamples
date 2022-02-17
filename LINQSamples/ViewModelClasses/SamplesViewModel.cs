@@ -216,7 +216,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Total Products: {Products.Count}";
 
         }
-
         public void First()
         {
             string search = "Red";
@@ -237,6 +236,30 @@ namespace LINQSamples.ViewModelClasses
             catch
             {
                 ResultText = "Not Found";
+            }
+            Products.Clear();
+        }
+
+        public void FirstOrDefault()
+        {
+            string search = "Red";
+            Product value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).FirstOrDefault(prod => prod.Color == search);
+            }
+            else
+            {
+                value = Products.FirstOrDefault(prod => prod.Color == search);
+            }
+
+            if (value == null)
+            {
+                ResultText = "Not Found";
+            }
+            else
+            {
+                ResultText = $"Found : {value}";
             }
             Products.Clear();
         }
