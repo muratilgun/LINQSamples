@@ -12,10 +12,12 @@ namespace LINQSamples.ViewModelClasses
         public SamplesViewModel()
         {
             Products = ProductRepository.GetAll();
+            Sales = SalesOrderDetailRepository.GetAll();
         }
 
         public bool UseQuerySyntax = true;
         public List<Product> Products { get; set; }
+        public List<SalesOrderDetail> Sales { get; set; }
         public string ResultText { get; set; }
 
         public void GetAllLooping()
@@ -367,7 +369,6 @@ namespace LINQSamples.ViewModelClasses
             }
             Products.Clear();
         }
-
         public void ForEach()
         {
             if (UseQuerySyntax)
@@ -380,6 +381,27 @@ namespace LINQSamples.ViewModelClasses
             }
 
             ResultText = $"Total Products: {Products.Count}";
+        }
+
+        public void ForEachCallingMethod()
+        {
+            if (UseQuerySyntax)
+            {
+                Products =
+                    (from prod in Products let tmp = prod.TotalSales = SalesForProduct(prod) select prod).ToList();
+            }
+            else
+            {
+                Products.ForEach(prod => prod.TotalSales = SalesForProduct(prod));
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
+
+        private decimal SalesForProduct(Product prod)
+        {
+            return Sales.Where(sale => sale.ProductID == prod.ProductID)
+                .Sum(sale => sale.LineTotal);
         }
 
     }

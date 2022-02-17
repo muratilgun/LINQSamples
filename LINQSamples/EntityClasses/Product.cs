@@ -21,9 +21,16 @@ namespace LINQSamples.EntityClasses
             sb.AppendLine($"  ID: {ProductID}");
             sb.Append($"   Color: {Color}");
             sb.AppendLine($"   Size: {(Size ?? "n/a")}");
-            sb.Append($"   Cost: {StandardCost:c}");
-            sb.AppendLine($"   Price: {ListPrice:c}");
-            sb.Append($"   Name Length : {NameLength}");
+            sb.Append($"   Cost: ${StandardCost}");
+            sb.AppendLine($"   Price: ${ListPrice}");
+            if (NameLength.HasValue)
+            {
+                sb.AppendLine($"   Name Length: {NameLength}");
+            }
+            if (TotalSales.HasValue)
+            {
+                sb.AppendLine($"   Total Sales: ${TotalSales}");
+            }
             return sb.ToString();
         }
         #endregion
