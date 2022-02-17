@@ -382,27 +382,24 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
-
-        public void ForEachCallingMethod()
-        {
-            if (UseQuerySyntax)
-            {
-                Products =
-                    (from prod in Products let tmp = prod.TotalSales = SalesForProduct(prod) select prod).ToList();
-            }
-            else
-            {
-                Products.ForEach(prod => prod.TotalSales = SalesForProduct(prod));
-            }
-
-            ResultText = $"Total Products: {Products.Count}";
-        }
-
         private decimal SalesForProduct(Product prod)
         {
             return Sales.Where(sale => sale.ProductID == prod.ProductID)
                 .Sum(sale => sale.LineTotal);
         }
 
+        public void Take()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name select prod).Take(5).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).Take(5).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
     }
 }

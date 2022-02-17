@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace LINQSamples.EntityClasses
 {
@@ -16,20 +17,19 @@ namespace LINQSamples.EntityClasses
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(1024);
-
             sb.Append(Name);
             sb.AppendLine($"  ID: {ProductID}");
             sb.Append($"   Color: {Color}");
             sb.AppendLine($"   Size: {(Size ?? "n/a")}");
-            sb.Append($"   Cost: ${StandardCost}");
-            sb.AppendLine($"   Price: ${ListPrice}");
+            sb.Append($"   Cost: {StandardCost.ToString("C", new CultureInfo("en-US"))}");
+            sb.AppendLine($"   Price: {ListPrice.ToString("C", new CultureInfo("en-US"))}");
             if (NameLength.HasValue)
             {
                 sb.AppendLine($"   Name Length: {NameLength}");
             }
             if (TotalSales.HasValue)
             {
-                sb.AppendLine($"   Total Sales: ${TotalSales}");
+                sb.AppendLine($"   Total Sales: {TotalSales?.ToString("C", new CultureInfo("en-US"))}");
             }
             return sb.ToString();
         }

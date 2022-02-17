@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace LINQSamples.EntityClasses
 {
@@ -25,8 +20,8 @@ namespace LINQSamples.EntityClasses
             sb.AppendLine($"Order ID: {SalesOrderID}");
             sb.Append($"   Product ID: {ProductID}");
             sb.AppendLine($"   Qty: {OrderQty}");
-            sb.Append($"   Unit Price: ${UnitPrice}");
-            sb.AppendLine($"   Total: ${LineTotal}");
+            sb.Append($"   Unit Price: ${UnitPrice.ToString("C", new CultureInfo("en-US"))}");
+            sb.AppendLine($"   Total: ${LineTotal.ToString("C", new CultureInfo("en-US"))}");
 
             return sb.ToString();
         }
