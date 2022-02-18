@@ -387,7 +387,6 @@ namespace LINQSamples.ViewModelClasses
             return Sales.Where(sale => sale.ProductID == prod.ProductID)
                 .Sum(sale => sale.LineTotal);
         }
-
         public void Take()
         {
             if (UseQuerySyntax)
@@ -401,5 +400,20 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
+        public void TakeWhile()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name select prod).TakeWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).TakeWhile(prod=> prod.Name.StartsWith("A")).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+
+        }
+
     }
 }
