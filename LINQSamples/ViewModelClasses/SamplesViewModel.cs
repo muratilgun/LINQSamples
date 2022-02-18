@@ -414,6 +414,32 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Total Products: {Products.Count}";
 
         }
+        public void Skip()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name select prod).Skip(20).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).Skip(20).ToList();
+            }
 
+            ResultText = $"Total Products: {Products.Count}";
+        }
+
+        public void SkipWhile()
+        {
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in Products orderby prod.Name select prod).SkipWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+            else
+            {
+                Products = Products.OrderBy(prod => prod.Name).SkipWhile(prod => prod.Name.StartsWith("A")).ToList();
+            }
+
+            ResultText = $"Total Products: {Products.Count}";
+        }
     }
 }
