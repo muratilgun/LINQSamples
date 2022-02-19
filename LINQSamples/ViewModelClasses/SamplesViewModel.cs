@@ -494,7 +494,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Do any Name properties contain a '{search}'? {value}";
             Products.Clear();
         }
-
         public void LINQContains()
         {
             bool value;
@@ -510,6 +509,24 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Is the number in collection? {value}";
             Products.Clear();
+        }
+
+        public void LINQContainsUsingComparer()
+        {
+            int search = 744;
+            bool value;
+            ProductIdComparer pc = new ProductIdComparer();
+            Product prodToFind = new Product { ProductID = search };
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Contains(prodToFind, pc);
+            }
+            else
+            {
+                value = Products.Contains(prodToFind, pc);
+            }
+
+            ResultText = $"Product ID: {search} is in Products Collection = {value}";
         }
 
     }
