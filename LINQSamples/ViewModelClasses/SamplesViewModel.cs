@@ -427,7 +427,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {Products.Count}";
         }
-
         public void SkipWhile()
         {
             if (UseQuerySyntax)
@@ -440,6 +439,28 @@ namespace LINQSamples.ViewModelClasses
             }
 
             ResultText = $"Total Products: {Products.Count}";
+
+        }
+        public void Distinct()
+        {
+            List<string> colors;
+            if (UseQuerySyntax)
+            {
+                colors = (from prod in Products select prod.Color).Distinct().ToList();
+            }
+            else
+            {
+                colors = Products.Select(prod => prod.Color).Distinct().ToList();
+            }
+
+            foreach (var color in colors)
+            {
+                Console.WriteLine($"Color: {color}");   
+            }
+
+            Console.WriteLine($"Total Colors: {colors.Count}");
+            Products.Clear();
+
         }
     }
 }
