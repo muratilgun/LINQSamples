@@ -462,5 +462,22 @@ namespace LINQSamples.ViewModelClasses
             Products.Clear();
 
         }
+
+        public void All()
+        {
+            string search = " ";
+            bool value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).All(prod => prod.Name.Contains(search));
+            }
+            else
+            {
+                value = Products.All(prod => prod.Name.Contains(search));
+            }
+
+            ResultText = $"Do all Name properties contain a '{search}'? {value}";
+            Products.Clear();
+        }
     }
 }
