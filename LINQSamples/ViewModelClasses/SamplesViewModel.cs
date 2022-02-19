@@ -494,5 +494,23 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Do any Name properties contain a '{search}'? {value}";
             Products.Clear();
         }
+
+        public void LINQContains()
+        {
+            bool value;
+            List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+            if (UseQuerySyntax)
+            {
+                value = (from num in numbers select num).Contains(3);
+            }
+            else
+            {
+                value = numbers.Contains(3);
+            }
+
+            ResultText = $"Is the number in collection? {value}";
+            Products.Clear();
+        }
+
     }
 }
