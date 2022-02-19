@@ -462,7 +462,6 @@ namespace LINQSamples.ViewModelClasses
             Products.Clear();
 
         }
-
         public void All()
         {
             string search = " ";
@@ -477,6 +476,22 @@ namespace LINQSamples.ViewModelClasses
             }
 
             ResultText = $"Do all Name properties contain a '{search}'? {value}";
+            Products.Clear();
+        }
+        public void Any()
+        {
+            string search = "z";
+            bool value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Any(prod => prod.Name.Contains(search));
+            }
+            else
+            {
+                value = Products.Any(prod => prod.Name.Contains(search));
+            }
+
+            ResultText = $"Do any Name properties contain a '{search}'? {value}";
             Products.Clear();
         }
     }
