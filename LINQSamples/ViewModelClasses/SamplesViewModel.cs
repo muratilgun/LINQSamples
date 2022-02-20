@@ -662,5 +662,37 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products : {Products.Count}";
         }
+        public void Union()
+        {
+            //İki listede sadece farklı nesneleri bir araya getirirler t-sql union
+            ProductComparer pc = new ProductComparer();
+            List<Product> list1 = ProductRepository.GetAll();
+            List<Product> list2 = ProductRepository.GetAll();
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in list1 select prod).Union(list2, pc).OrderBy(prod => prod.Name).ToList();
+            }
+            else
+            {
+                Products = list1.Union(list2, pc).OrderBy(prod => prod.Name).ToList();
+            }
+            ResultText = $"Total Products : {Products.Count}";
+        }
+
+        public void LINQConcat()
+        {
+            //İki listenin tamamını bir araya getirirler t-sql unionall
+            List<Product> list1 = ProductRepository.GetAll();
+            List<Product> list2 = ProductRepository.GetAll();
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in list1 select prod).Concat(list2).OrderBy(prod => prod.Name).ToList();
+            }
+            else
+            {
+                Products = list1.Concat(list2).OrderBy(prod => prod.Name).ToList();
+            }
+            ResultText = $"Total Products : {Products.Count}";
+        }
     }
 }
