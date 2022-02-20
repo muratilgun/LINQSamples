@@ -527,7 +527,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Product ID: {search} is in Products Collection = {value}";
         }
-
         public void SequenceEqualIntegers()
         {
             bool value;
@@ -550,7 +549,6 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = "Lists are NOT Equal";
             }
         }
-
         public void SequenceEqualProducts()
         {
             bool value;
@@ -574,6 +572,31 @@ namespace LINQSamples.ViewModelClasses
                 value = list1.SequenceEqual(list2);
             }
 
+            if (value)
+            {
+                ResultText = "Lists are Equal";
+            }
+            else
+            {
+                ResultText = "Lists are NOT Equal";
+            }
+        }
+
+        public void SequenceEqualUsingComparer()
+        {
+            bool value;
+            ProductComparer pc = new ProductComparer();
+            List<Product> list1 = ProductRepository.GetAll();
+            List<Product> list2 = ProductRepository.GetAll();
+            list1.RemoveAt(0);
+            if (UseQuerySyntax)
+            {
+                value = (from prod in list1 select prod).SequenceEqual(list2, pc);
+            }
+            else
+            {
+                value = list1.SequenceEqual(list2, pc);
+            }
             if (value)
             {
                 ResultText = "Lists are Equal";
