@@ -937,6 +937,32 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString() + Environment.NewLine + "Total Sales: " + count.ToString();
         }
-        
+        public void GroupBy()
+        {
+            StringBuilder sb = new StringBuilder();
+            IEnumerable<IGrouping<string, Product>> sizeGroup;
+            if (UseQuerySyntax)
+            {
+                sizeGroup = (from prod in Products orderby prod.Size group prod by prod.Size);
+            }
+            else
+            {
+                sizeGroup=Products.OrderBy(prod=>prod.Size)
+                                  .GroupBy(prod=>prod.Size);
+            }
+
+            foreach (var group in sizeGroup)
+            {
+                sb.AppendLine($"Size: {group.Key} Count: {group.Count()}");
+                foreach (var prod in group)
+                {
+                    sb.Append($"  ProductID:{prod.ProductID}");
+                    sb.Append($"  Name: {prod.Name}");
+                    sb.AppendLine($"  Color: {prod.Color}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
     }
 }
