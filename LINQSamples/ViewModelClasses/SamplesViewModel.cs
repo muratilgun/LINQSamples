@@ -1018,7 +1018,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
-
         public void GroupByWhere()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -1043,6 +1042,61 @@ namespace LINQSamples.ViewModelClasses
                     sb.Append($"  ProductID:{prod.ProductID}");
                     sb.Append($"  Name: {prod.Name}");
                     sb.AppendLine($"  Color: {prod.Color}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
+
+        public void GroupedSubquery()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            IEnumerable<SaleProducts> salesGroup;
+
+            if (UseQuerySyntax)
+            {
+                salesGroup = (from sale in Sales
+                    group sale by sale.SalesOrderID into sales
+                    select new SaleProducts
+                    {
+                        SalesOrderID = sales.Key,
+                        Products = (from prod in Products
+                            join sale in Sales on prod.ProductID equals sale.ProductID
+                            where sale.SalesOrderID == sales.Key
+                            select prod).ToList()
+                    });
+            }
+            else
+            {
+                // Method syntax
+                salesGroup =
+                    Sales.GroupBy(sale => sale.SalesOrderID)
+                        .Select(sales => new SaleProducts
+                        {
+                            SalesOrderID = sales.Key,
+                            Products = Products.Join(sales,
+                                prod => prod.ProductID,
+                                sale => sale.ProductID,
+                                (prod, sale) => prod).ToList()
+                        });
+            }
+
+            foreach (var sale in salesGroup)
+            {
+                sb.AppendLine($"Sales ID: {sale.SalesOrderID}");
+
+                if (sale.Products.Count > 0)
+                {
+                    foreach (var prod in sale.Products)
+                    {
+                        sb.Append($"  ProductID: {prod.ProductID}");
+                        sb.Append($"  Name: {prod.Name}");
+                        sb.AppendLine($"  Color: {prod.Color}");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine("   Product ID not found for this sale.");
                 }
             }
 
