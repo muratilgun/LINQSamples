@@ -964,5 +964,60 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
+        public void GroupByIntoSelect()
+        {
+            StringBuilder sb = new StringBuilder();
+            IEnumerable<IGrouping<string, Product>> sizeGroup;
+            if (UseQuerySyntax)
+            {
+                sizeGroup = (from prod in Products orderby prod.Size group prod by prod.Size into sizes select sizes);
+
+            }
+            else
+            {
+                sizeGroup = Products.OrderBy(prod => prod.Size).GroupBy(prod => prod.Size);
+
+            }
+            foreach (var group in sizeGroup)
+            {
+                sb.AppendLine($"Size: {group.Key} Count: {group.Count()}");
+                foreach (var prod in group)
+                {
+                    sb.Append($"  ProductID:{prod.ProductID}");
+                    sb.Append($"  Name: {prod.Name}");
+                    sb.AppendLine($"  Color: {prod.Color}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
+
+        public void GroupByOrderByKey()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            IEnumerable<IGrouping<string, Product>> sizeGroup;
+            if (UseQuerySyntax)
+            {
+                sizeGroup = (from prod in Products group  prod by prod.Size into sizes orderby  sizes.Key select sizes);
+
+            }
+            else
+            {
+                sizeGroup = Products.GroupBy(prod => prod.Size).OrderBy(sizes => sizes.Key).Select(sizes => sizes);
+
+            }
+            foreach (var group in sizeGroup)
+            {
+                sb.AppendLine($"Size: {group.Key} Count: {group.Count()}");
+                foreach (var prod in group)
+                {
+                    sb.Append($"  ProductID:{prod.ProductID}");
+                    sb.Append($"  Name: {prod.Name}");
+                    sb.AppendLine($"  Color: {prod.Color}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
     }
 }
