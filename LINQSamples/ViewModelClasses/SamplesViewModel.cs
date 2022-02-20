@@ -510,7 +510,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Is the number in collection? {value}";
             Products.Clear();
         }
-
         public void LINQContainsUsingComparer()
         {
             int search = 744;
@@ -529,5 +528,60 @@ namespace LINQSamples.ViewModelClasses
             ResultText = $"Product ID: {search} is in Products Collection = {value}";
         }
 
+        public void SequenceEqualIntegers()
+        {
+            bool value;
+            List<int> list1 = new List<int> { 1, 2, 3, 4, 5 };
+            List<int> list2 = new List<int> { 1, 2, 3, 4, 5 };
+            if (UseQuerySyntax)
+            {
+                value = (from num in list1 select num).SequenceEqual(list2);
+            }
+            else
+            {
+                value = list1.SequenceEqual(list2);
+            }
+            if (value)
+            {
+                ResultText = "Lists are Equal";
+            }
+            else
+            {
+                ResultText = "Lists are NOT Equal";
+            }
+        }
+
+        public void SequenceEqualProducts()
+        {
+            bool value;
+            List<Product> list1 = new List<Product>
+            {
+                new Product{ProductID = 1,Name = "Product 1"},
+                new Product{ProductID = 2,Name = "Product 2"}
+            };
+
+            List<Product> list2 = new List<Product>
+            {
+                new Product{ProductID = 1,Name = "Product 1"},
+                new Product{ProductID = 2,Name = "Product 2"}
+            };
+            if (UseQuerySyntax)
+            {
+                value = (from prod in list1 select prod).SequenceEqual(list2);
+            }
+            else
+            {
+                value = list1.SequenceEqual(list2);
+            }
+
+            if (value)
+            {
+                ResultText = "Lists are Equal";
+            }
+            else
+            {
+                ResultText = "Lists are NOT Equal";
+            }
+        }
     }
 }

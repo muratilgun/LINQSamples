@@ -10,7 +10,7 @@ namespace LINQSamples
             //Instantiate the ViewModel
             SamplesViewModel vm = new SamplesViewModel { UseQuerySyntax = false};
             //Call a sample method
-            vm.LINQContainsUsingComparer();
+            vm.SequenceEqualProducts();
             
             // Display Product Collection
             //foreach (var item in vm.Products)
