@@ -821,7 +821,6 @@ namespace LINQSamples.ViewModelClasses
             ResultText = sb.ToString() + Environment.NewLine + $"Total Sales : {count.ToString()}";
 
         }
-
         public void GroupJoin()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -871,5 +870,73 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
+        public void LeftOuterJoin()
+        {
+            //tüm ürünleri getir eğer satış varsa satışları yazdır. yoksa boş değer döndür.
+            //Sağ taraf null değeri ifade ediyor.
+            StringBuilder sb = new StringBuilder(2048);
+            int count = 0;
+            if (UseQuerySyntax)
+            {
+                var query = (from prod in Products
+                             join sale in Sales
+                                 on prod.ProductID equals sale.ProductID into sales
+                             from sale in sales.DefaultIfEmpty()
+                             select new
+                             {
+                                 prod.ProductID,
+                                 prod.Name,
+                                 prod.Color,
+                                 prod.StandardCost,
+                                 prod.ListPrice,
+                                 prod.Size,
+                                 sale?.SalesOrderID,
+                                 sale?.OrderQty,
+                                 sale?.UnitPrice,
+                                 sale?.LineTotal
+                             }).OrderBy(ps => ps.Name);
+                foreach (var item in query)
+                {
+                    count++;
+                    sb.AppendLine($"Product Name: {item.Name} ({item.ProductID})");
+                    sb.AppendLine($"   Order ID: {item.SalesOrderID}");
+                    sb.AppendLine($"   Size: {item.Size}");
+                    sb.AppendLine($"   Order Qty: {item.OrderQty}");
+                    sb.AppendLine($"   Total: {item.LineTotal?.ToString("C", new CultureInfo("en-US"))}");
+                } 
+            }
+            else
+            {
+                var query = Products.SelectMany(
+                    sale =>
+                        Sales.Where(s => sale.ProductID == s.ProductID).DefaultIfEmpty(),
+                    (prod, sale) => new
+                    {
+                        prod.ProductID,
+                        prod.Name,
+                        prod.Color,
+                        prod.StandardCost,
+                        prod.ListPrice,
+                        prod.Size,
+                        sale?.SalesOrderID,
+                        sale?.OrderQty,
+                        sale?.UnitPrice,
+                        sale?.LineTotal
+                    }).OrderBy(ps => ps.Name);
+
+                foreach (var item in query)
+                {
+                    count++;
+                    sb.AppendLine($"Product Name: {item.Name} ({item.ProductID})");
+                    sb.AppendLine($"  Order ID: {item.SalesOrderID}");
+                    sb.AppendLine($"  Size: {item.Size}");
+                    sb.AppendLine($"  Order Qty: {item.OrderQty}");
+                    sb.AppendLine($"  Total: {item.LineTotal?.ToString("C", new CultureInfo("en-US"))}");
+                }
+            }
+
+            ResultText = sb.ToString() + Environment.NewLine + "Total Sales: " + count.ToString();
+        }
+        
     }
 }
