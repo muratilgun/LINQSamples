@@ -581,7 +581,6 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = "Lists are NOT Equal";
             }
         }
-
         public void SequenceEqualUsingComparer()
         {
             bool value;
@@ -605,6 +604,44 @@ namespace LINQSamples.ViewModelClasses
             {
                 ResultText = "Lists are NOT Equal";
             }
+        }
+        public void ExceptIntegers()
+        {
+            List<int> exceptions;
+            List<int> list1 = new List<int> { 1, 2, 3, 4 };
+            List<int> list2 = new List<int> {3, 4,5 };
+            if (UseQuerySyntax)
+            {
+                exceptions = (from num in list1 select num).Except(list2).ToList();
+            }
+            else
+            {
+                exceptions = list1.Except(list2).ToList();
+            }
+
+            ResultText = string.Empty;
+            foreach (var item in exceptions)
+            {
+                ResultText += "Number: " + item + Environment.NewLine;
+            }
+            Products.Clear();
+        }
+        public void ExceptProducts()
+        {
+            ProductComparer pc = new ProductComparer();
+            List<Product> list1 = ProductRepository.GetAll();
+            List<Product> list2 = ProductRepository.GetAll();
+            list2.RemoveAll(prod => prod.Color == "Black");
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in list1 select prod).Except(list2, pc).ToList();
+            }
+            else
+            {
+                Products = list1.Except(list2, pc).ToList();
+            }
+
+            ResultText = $"Total Products : {Products.Count}";
         }
     }
 }
