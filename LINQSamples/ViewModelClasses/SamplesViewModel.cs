@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using LINQSamples.EntityClasses;
@@ -678,7 +679,6 @@ namespace LINQSamples.ViewModelClasses
             }
             ResultText = $"Total Products : {Products.Count}";
         }
-
         public void LINQConcat()
         {
             //İki listenin tamamını bir araya getirirler t-sql unionall
@@ -693,6 +693,68 @@ namespace LINQSamples.ViewModelClasses
                 Products = list1.Concat(list2).OrderBy(prod => prod.Name).ToList();
             }
             ResultText = $"Total Products : {Products.Count}";
+        }
+
+        public void InnerJoin()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            int count = 0;
+            if (UseQuerySyntax)
+            {
+                var query = (from prod in Products
+                    join sale in Sales on prod.ProductID equals sale.ProductID
+                    select new
+                    {
+                        prod.ProductID,
+                        prod.Name,
+                        prod.Color,
+                        prod.StandardCost,
+                        prod.ListPrice,
+                        prod.Size,
+                        sale.SalesOrderID,
+                        sale.OrderQty,
+                        sale.UnitPrice,
+                        sale.LineTotal
+                    });
+                foreach (var item in query)
+                {
+                    count++;
+                    sb.AppendLine($"Sales Order: {item.SalesOrderID}");
+                    sb.AppendLine($"  Product ID: {item.ProductID}");
+                    sb.AppendLine($"  Product Name: {item.Name}");
+                    sb.AppendLine($"  Size: {item.Size}");
+                    sb.AppendLine($"  Order Qty: {item.OrderQty}");
+                    sb.AppendLine($"  Total: {item.LineTotal:c}");
+                }
+            }
+            else
+            {
+                var query = Products.Join(Sales, prod => prod.ProductID, sale => sale.ProductID, (prod, sale) =>new
+                {
+                    prod.ProductID,
+                    prod.Name,
+                    prod.Color,
+                    prod.StandardCost,
+                    prod.ListPrice,
+                    prod.Size,
+                    sale.SalesOrderID,
+                    sale.OrderQty,
+                    sale.UnitPrice,
+                    sale.LineTotal
+                });
+                foreach (var item in query)
+                {
+                    count++;
+                    sb.AppendLine($"Sales Order: {item.SalesOrderID}");
+                    sb.AppendLine($"  Product ID: {item.ProductID}");
+                    sb.AppendLine($"  Product Name: {item.Name}");
+                    sb.AppendLine($"  Size: {item.Size}");
+                    sb.AppendLine($"  Order Qty: {item.OrderQty}");
+                    sb.AppendLine($"  Total: {item.LineTotal.ToString("C", new CultureInfo("en-US"))}");
+                }
+            }
+
+            ResultText = sb.ToString() + Environment.NewLine + $"Total Sales : {count.ToString()}";
         }
     }
 }

@@ -10,7 +10,7 @@ namespace LINQSamples
             //Instantiate the ViewModel
             SamplesViewModel vm = new SamplesViewModel { UseQuerySyntax = false};
             //Call a sample method
-            vm.LINQConcat();
+            vm.InnerJoin();
 
             // Display Product Collection
             foreach (var item in vm.Products)
