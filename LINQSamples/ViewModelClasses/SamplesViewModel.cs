@@ -991,7 +991,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
-
         public void GroupByOrderByKey()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -1004,6 +1003,36 @@ namespace LINQSamples.ViewModelClasses
             else
             {
                 sizeGroup = Products.GroupBy(prod => prod.Size).OrderBy(sizes => sizes.Key).Select(sizes => sizes);
+
+            }
+            foreach (var group in sizeGroup)
+            {
+                sb.AppendLine($"Size: {group.Key} Count: {group.Count()}");
+                foreach (var prod in group)
+                {
+                    sb.Append($"  ProductID:{prod.ProductID}");
+                    sb.Append($"  Name: {prod.Name}");
+                    sb.AppendLine($"  Color: {prod.Color}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
+
+        public void GroupByWhere()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            IEnumerable<IGrouping<string, Product>> sizeGroup;
+            if (UseQuerySyntax)
+            {
+                sizeGroup = (from prod in Products group prod by prod.Size into sizes where sizes.Count() > 2 select sizes);
+
+            }
+            else
+            {
+                sizeGroup = Products.GroupBy(prod => prod.Size)
+                    .Where(sizes=> sizes.Count() > 2)
+                    .Select(sizes => sizes);
 
             }
             foreach (var group in sizeGroup)
