@@ -53,7 +53,7 @@ namespace LINQSamples.ViewModelClasses
             List<string> list = new List<string>();
             if (UseQuerySyntax)
             {
-                list.AddRange(from prod in Products select  prod.Name);
+                list.AddRange(from prod in Products select prod.Name);
             }
             else
             {
@@ -67,19 +67,19 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products: {list.Count}" + Environment.NewLine + sb.ToString();
             Products.Clear();
-            
+
         }
         public void GetSpecificColumns()
         {
             if (UseQuerySyntax)
             {
                 Products = (from prod in Products
-                    select new Product
-                    {
-                        ProductID = prod.ProductID,
-                        Name = prod.Name,
-                        Size = prod.Size
-                    }).ToList();
+                            select new Product
+                            {
+                                ProductID = prod.ProductID,
+                                Name = prod.Name,
+                                Size = prod.Size
+                            }).ToList();
             }
             else
             {
@@ -97,12 +97,12 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 var products = (from prod in Products
-                    select new
-                    {
-                        Identifier = prod.ProductID,
-                        ProductName = prod.Name,
-                        ProductSize = prod.Size
-                    });
+                                select new
+                                {
+                                    Identifier = prod.ProductID,
+                                    ProductName = prod.Name,
+                                    ProductSize = prod.Size
+                                });
 
                 foreach (var prod in products)
                 {
@@ -117,7 +117,7 @@ namespace LINQSamples.ViewModelClasses
                 {
                     Identifier = prod.ProductID,
                     ProductName = prod.Name,
-                    ProductSize =prod.Size
+                    ProductSize = prod.Size
                 });
                 foreach (var prod in products)
                 {
@@ -177,8 +177,8 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 Products = (from prod in Products
-                    where prod.Name.StartsWith(search)
-                    select prod).ToList();
+                            where prod.Name.StartsWith(search)
+                            select prod).ToList();
             }
             else
             {
@@ -194,8 +194,8 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 Products = (from prod in Products
-                    where prod.Name.StartsWith(search) && prod.StandardCost > cost
-                    select prod).ToList();
+                            where prod.Name.StartsWith(search) && prod.StandardCost > cost
+                            select prod).ToList();
             }
             else
             {
@@ -282,7 +282,7 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = $"Found : {value}";
 
             }
-            catch 
+            catch
             {
                 ResultText = "Not Found";
 
@@ -329,7 +329,7 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = $"Found: {value}";
 
             }
-            catch 
+            catch
             {
 
                 ResultText = "Not Found, or multiple elements found";
@@ -362,7 +362,7 @@ namespace LINQSamples.ViewModelClasses
                     ResultText = $"Found : {value}";
                 }
             }
-            catch 
+            catch
             {
 
                 ResultText = "Multiple elements found";
@@ -409,7 +409,7 @@ namespace LINQSamples.ViewModelClasses
             }
             else
             {
-                Products = Products.OrderBy(prod => prod.Name).TakeWhile(prod=> prod.Name.StartsWith("A")).ToList();
+                Products = Products.OrderBy(prod => prod.Name).TakeWhile(prod => prod.Name.StartsWith("A")).ToList();
             }
 
             ResultText = $"Total Products: {Products.Count}";
@@ -456,7 +456,7 @@ namespace LINQSamples.ViewModelClasses
 
             foreach (var color in colors)
             {
-                Console.WriteLine($"Color: {color}");   
+                Console.WriteLine($"Color: {color}");
             }
 
             Console.WriteLine($"Total Colors: {colors.Count}");
@@ -610,7 +610,7 @@ namespace LINQSamples.ViewModelClasses
         {
             List<int> exceptions;
             List<int> list1 = new List<int> { 1, 2, 3, 4 };
-            List<int> list2 = new List<int> {3, 4,5 };
+            List<int> list2 = new List<int> { 3, 4, 5 };
             if (UseQuerySyntax)
             {
                 exceptions = (from num in list1 select num).Except(list2).ToList();
@@ -701,20 +701,20 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 var query = (from prod in Products
-                    join sale in Sales on prod.ProductID equals sale.ProductID
-                    select new
-                    {
-                        prod.ProductID,
-                        prod.Name,
-                        prod.Color,
-                        prod.StandardCost,
-                        prod.ListPrice,
-                        prod.Size,
-                        sale.SalesOrderID,
-                        sale.OrderQty,
-                        sale.UnitPrice,
-                        sale.LineTotal
-                    });
+                             join sale in Sales on prod.ProductID equals sale.ProductID
+                             select new
+                             {
+                                 prod.ProductID,
+                                 prod.Name,
+                                 prod.Color,
+                                 prod.StandardCost,
+                                 prod.ListPrice,
+                                 prod.Size,
+                                 sale.SalesOrderID,
+                                 sale.OrderQty,
+                                 sale.UnitPrice,
+                                 sale.LineTotal
+                             });
                 foreach (var item in query)
                 {
                     count++;
@@ -728,7 +728,7 @@ namespace LINQSamples.ViewModelClasses
             }
             else
             {
-                var query = Products.Join(Sales, prod => prod.ProductID, sale => sale.ProductID, (prod, sale) =>new
+                var query = Products.Join(Sales, prod => prod.ProductID, sale => sale.ProductID, (prod, sale) => new
                 {
                     prod.ProductID,
                     prod.Name,
@@ -755,7 +755,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString() + Environment.NewLine + $"Total Sales : {count.ToString()}";
         }
-
         public void InnerJoinTwoFields()
         {
             short qty = 6;
@@ -764,21 +763,21 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 var query = (from prod in Products
-                    join sale in Sales on new { prod.ProductID, Qty = qty } equals new
-                        { sale.ProductID, Qty = sale.OrderQty }
-                    select new
-                    {
-                        prod.ProductID,
-                        prod.Name,
-                        prod.Color,
-                        prod.StandardCost,
-                        prod.ListPrice,
-                        prod.Size,
-                        sale.SalesOrderID,
-                        sale.OrderQty,
-                        sale.UnitPrice,
-                        sale.LineTotal
-                    });
+                             join sale in Sales on new { prod.ProductID, Qty = qty } equals new
+                             { sale.ProductID, Qty = sale.OrderQty }
+                             select new
+                             {
+                                 prod.ProductID,
+                                 prod.Name,
+                                 prod.Color,
+                                 prod.StandardCost,
+                                 prod.ListPrice,
+                                 prod.Size,
+                                 sale.SalesOrderID,
+                                 sale.OrderQty,
+                                 sale.UnitPrice,
+                                 sale.LineTotal
+                             });
                 foreach (var item in query)
                 {
                     count++;
@@ -793,18 +792,18 @@ namespace LINQSamples.ViewModelClasses
             else
             {
                 var query = Products.Join(Sales, prod => new { prod.ProductID, Qty = qty },
-                    sale => new {sale.ProductID,Qty=sale.OrderQty},(prod, sale)=> new 
-                {
-                    prod.ProductID,
-                    prod.Name,
-                    prod.Color,
-                    prod.StandardCost,
-                    prod.ListPrice,
-                    prod.Size,
-                    sale.SalesOrderID,
-                    sale.OrderQty,
-                    sale.UnitPrice,
-                    sale.LineTotal
+                    sale => new { sale.ProductID, Qty = sale.OrderQty }, (prod, sale) => new
+                    {
+                        prod.ProductID,
+                        prod.Name,
+                        prod.Color,
+                        prod.StandardCost,
+                        prod.ListPrice,
+                        prod.Size,
+                        sale.SalesOrderID,
+                        sale.OrderQty,
+                        sale.UnitPrice,
+                        sale.LineTotal
                     });
 
                 foreach (var item in query)
@@ -821,6 +820,56 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString() + Environment.NewLine + $"Total Sales : {count.ToString()}";
 
+        }
+
+        public void GroupJoin()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            IEnumerable<ProductSales> grouped;
+            if (UseQuerySyntax)
+            {
+                grouped = (from prod in Products
+                           join sale in Sales on prod.ProductID equals sale.ProductID into sales
+                           select new ProductSales
+                           {
+                               Product = prod,
+                               Sales = sales
+                           });
+            }
+            else
+            {
+                grouped = Products.GroupJoin(Sales,
+                    prod => prod.ProductID,
+                    sale => sale.ProductID,
+                    (prod, sales) => new ProductSales
+                    {
+                        Product = prod,
+                        Sales = sales.ToList()
+                    });
+            }
+
+            foreach (var ps in grouped)
+            {
+                sb.Append($"Product: {ps.Product}");
+                if (ps.Sales.Count() > 0)
+                {
+                    sb.AppendLine("   ** Sales **");
+                    foreach (var sale in ps.Sales)
+                    {
+                        sb.Append($"   SalesOrdereID: {sale.SalesOrderID}");
+                        sb.Append($"   Qty: {sale.OrderQty}");
+                        sb.AppendLine($"     Total: {sale.LineTotal}");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine("   ** NO Sales for Product **");
+                }
+
+                sb.AppendLine("");
+            }
+
+            ResultText = sb.ToString();
         }
     }
 }
