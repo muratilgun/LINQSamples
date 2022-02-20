@@ -643,5 +643,24 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products : {Products.Count}";
         }
+        public void Intersect()
+        {
+            //Her iki listedeki ortak objeleri bulur.
+            ProductComparer pc = new ProductComparer();
+            List<Product> list1 = ProductRepository.GetAll();
+            List<Product> list2 = ProductRepository.GetAll();
+            list1.RemoveAll(prod => prod.Color == "Black");
+            list2.RemoveAll(prod => prod.Color == "Red");
+            if (UseQuerySyntax)
+            {
+                Products = (from prod in list1 select prod).Intersect(list2, pc).ToList();
+            }
+            else
+            {
+                Products = list1.Intersect(list2, pc).ToList();
+            }
+
+            ResultText = $"Total Products : {Products.Count}";
+        }
     }
 }
