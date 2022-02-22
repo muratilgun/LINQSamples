@@ -903,7 +903,7 @@ namespace LINQSamples.ViewModelClasses
                     sb.AppendLine($"   Size: {item.Size}");
                     sb.AppendLine($"   Order Qty: {item.OrderQty}");
                     sb.AppendLine($"   Total: {item.LineTotal?.ToString("C", new CultureInfo("en-US"))}");
-                } 
+                }
             }
             else
             {
@@ -947,8 +947,8 @@ namespace LINQSamples.ViewModelClasses
             }
             else
             {
-                sizeGroup=Products.OrderBy(prod=>prod.Size)
-                                  .GroupBy(prod=>prod.Size);
+                sizeGroup = Products.OrderBy(prod => prod.Size)
+                                  .GroupBy(prod => prod.Size);
             }
 
             foreach (var group in sizeGroup)
@@ -997,7 +997,7 @@ namespace LINQSamples.ViewModelClasses
             IEnumerable<IGrouping<string, Product>> sizeGroup;
             if (UseQuerySyntax)
             {
-                sizeGroup = (from prod in Products group  prod by prod.Size into sizes orderby  sizes.Key select sizes);
+                sizeGroup = (from prod in Products group prod by prod.Size into sizes orderby sizes.Key select sizes);
 
             }
             else
@@ -1030,7 +1030,7 @@ namespace LINQSamples.ViewModelClasses
             else
             {
                 sizeGroup = Products.GroupBy(prod => prod.Size)
-                    .Where(sizes=> sizes.Count() > 2)
+                    .Where(sizes => sizes.Count() > 2)
                     .Select(sizes => sizes);
 
             }
@@ -1047,7 +1047,6 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
-
         public void GroupedSubquery()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -1056,15 +1055,15 @@ namespace LINQSamples.ViewModelClasses
             if (UseQuerySyntax)
             {
                 salesGroup = (from sale in Sales
-                    group sale by sale.SalesOrderID into sales
-                    select new SaleProducts
-                    {
-                        SalesOrderID = sales.Key,
-                        Products = (from prod in Products
-                            join sale in Sales on prod.ProductID equals sale.ProductID
-                            where sale.SalesOrderID == sales.Key
-                            select prod).ToList()
-                    });
+                              group sale by sale.SalesOrderID into sales
+                              select new SaleProducts
+                              {
+                                  SalesOrderID = sales.Key,
+                                  Products = (from prod in Products
+                                              join sale in Sales on prod.ProductID equals sale.ProductID
+                                              where sale.SalesOrderID == sales.Key
+                                              select prod).ToList()
+                              });
             }
             else
             {
@@ -1102,5 +1101,35 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = sb.ToString();
         }
+        public void Count()
+        {
+            int value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Count();
+            }
+            else
+            {
+                value = Products.Count();
+            }
+
+            ResultText = $"Total Products = {value}";
+        }
+        public void CountFiltered()
+        {
+            string search = "Red";
+            int value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Count(prod => prod.Color == search);
+            }
+            else
+            {
+                value = Products.Count(prod => prod.Color == search);
+            }
+
+            ResultText = $"Total Products with a color of 'Red' = {value}";
+        }
+
     }
 }
