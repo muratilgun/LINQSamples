@@ -1130,6 +1130,47 @@ namespace LINQSamples.ViewModelClasses
 
             ResultText = $"Total Products with a color of 'Red' = {value}";
         }
+        public void Minimum()
+        {
+            decimal? value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod.ListPrice).Min();
+            }
+            else
+            {
+                value = Products.Min(prod => prod.ListPrice);
+            }
 
+            if (value.HasValue)
+            {
+                ResultText = $"Minimum List Price = {value.Value.ToString("C", new CultureInfo("en-US"))}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
+        public void Maximum()
+        {
+            decimal? value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod.ListPrice).Max();
+            }
+            else
+            {
+                value = Products.Max(prod => prod.ListPrice);
+            }
+
+            if (value.HasValue)
+            {
+                ResultText = $"Maximum List Price = {value.Value.ToString("C", new CultureInfo("en-US"))}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
     }
 }
