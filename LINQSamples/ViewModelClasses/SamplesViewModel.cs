@@ -1172,5 +1172,90 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = "No List Prices Exist.";
             }
         }
+        public void Average()
+        {
+            decimal? value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod.ListPrice).Average();
+            }
+            else
+            {
+                value = Products.Average(prod => prod.ListPrice);
+            }
+
+            if (value.HasValue)
+            {
+                ResultText = $"Average List Price = {value.Value}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
+        public void Sum()
+        {
+            decimal? value;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod.ListPrice).Sum();
+            }
+            else
+            {
+                value = Products.Sum(prod => prod.ListPrice);
+            }
+
+            if (value.HasValue)
+            {
+                ResultText = $"Total of all List Prices = {value.Value.ToString("C", new CultureInfo("en-US"))}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
+        public void AggregateSum()
+        {
+            decimal? value = 0;
+            if (UseQuerySyntax)
+            {
+                value = (from prod in Products select prod).Aggregate(0M, (sum, prod) => sum += prod.ListPrice);
+            }
+            else
+            {
+                value = Products.Aggregate(0M, (sum, prod) => sum += prod.ListPrice);
+            }
+
+            if (value.HasValue)
+            {
+                ResultText = $"Total of all List Prices = {value.Value.ToString("C", new CultureInfo("en-US"))}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
+        public void AggregateCustom()
+        {
+            decimal? value = 0;
+            if (UseQuerySyntax)
+            {
+                value = (from sale in Sales select sale).Aggregate(0M,
+                    (sum, sale) => sum += (sale.OrderQty * sale.UnitPrice));
+            }
+            else
+            {
+                value = Sales.Aggregate(0M, (sum, sale) => sum += (sale.OrderQty * sale.UnitPrice));
+            }
+
+            if (value.HasValue)
+            {
+                ResultText = $"Total of all List Prices = {value.Value.ToString("C", new CultureInfo("en-US"))}";
+            }
+            else
+            {
+                ResultText = "No List Prices Exist.";
+            }
+        }
     }
 }
