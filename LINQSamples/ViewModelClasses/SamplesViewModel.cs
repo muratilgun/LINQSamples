@@ -1257,5 +1257,61 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = "No List Prices Exist.";
             }
         }
+
+        public void AggregateUsingGrouping()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+
+            if (UseQuerySyntax)
+            {
+                var stats = (from prod in Products
+                             group prod by prod.Size into sizeGroup
+                             where sizeGroup.Count() > 0
+                             select new
+                             {
+                                 Size = sizeGroup.Key,
+                                 TotalProducts = sizeGroup.Count(),
+                                 Max = sizeGroup.Max(s => s.ListPrice),
+                                 Min = sizeGroup.Min(s => s.ListPrice),
+                                 Average = sizeGroup.Average(s => s.ListPrice)
+                             }
+                             into result
+                             orderby result.Size
+                             select result);
+
+                foreach (var stat in stats)
+                {
+                    sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                    sb.AppendLine($"  Min: {stat.Min.ToString("C", new CultureInfo("en-US"))}");
+                    sb.AppendLine($"  Max: {stat.Max.ToString("C", new CultureInfo("en-US"))}");
+                    sb.AppendLine($"  Average: {stat.Average.ToString("C", new CultureInfo("en-US"))}");
+                }
+            }
+            else
+            {
+                var stats = Products.GroupBy(sale => sale.Size)
+                                    .Where(sizeGroup => sizeGroup.Count() > 0)
+                                    .Select(sizeGroup => new
+                                    {
+                                        Size = sizeGroup.Key,
+                                        TotalProducts = sizeGroup.Count(),
+                                        Max = sizeGroup.Max(s => s.ListPrice),
+                                        Min = sizeGroup.Min(s => s.ListPrice),
+                                        Average = sizeGroup.Average(s => s.ListPrice)
+                                    })
+                                    .OrderBy(result => result.Size)
+                                    .Select(result => result);
+
+                foreach (var stat in stats)
+                {
+                    sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                    sb.AppendLine($"  Min: {stat.Min.ToString("C", new CultureInfo("en-US"))}");
+                    sb.AppendLine($"  Max: {stat.Max.ToString("C", new CultureInfo("en-US"))}");
+                    sb.AppendLine($"  Average: {stat.Average.ToString("C", new CultureInfo("en-US"))}");
+                }
+            }
+
+            ResultText = sb.ToString();
+        }
     }
 }
