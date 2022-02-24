@@ -1257,7 +1257,6 @@ namespace LINQSamples.ViewModelClasses
                 ResultText = "No List Prices Exist.";
             }
         }
-
         public void AggregateUsingGrouping()
         {
             StringBuilder sb = new StringBuilder(2048);
@@ -1309,6 +1308,34 @@ namespace LINQSamples.ViewModelClasses
                     sb.AppendLine($"  Max: {stat.Max.ToString("C", new CultureInfo("en-US"))}");
                     sb.AppendLine($"  Average: {stat.Average.ToString("C", new CultureInfo("en-US"))}");
                 }
+            }
+
+            ResultText = sb.ToString();
+        }
+
+        public void AggregateUsingGroupingMoreEfficient()
+        {
+            StringBuilder sb = new StringBuilder(2048);
+            var stats = Products.GroupBy(sale => sale.Size)
+                .Where(sizeGroup => sizeGroup.Count() > 0)
+                .Select(sizeGroup =>
+                {
+                    var results = sizeGroup.Aggregate(new ProductStats(), (acc, prod) => acc.Accumulate(prod),
+                        acc => acc.ComputeAverage());
+                    return new
+                    {
+                        Size = sizeGroup.Key,results.TotalProducts,
+                        results.Min,
+                        results.Max,
+                        results.Average
+                    };
+                }).OrderBy(result => result.Size).Select(result => result);
+            foreach (var stat in stats)
+            {
+                sb.AppendLine($"Size: {stat.Size}  Count: {stat.TotalProducts}");
+                sb.AppendLine($"  Min: {stat.Min:c}");
+                sb.AppendLine($"  Max: {stat.Max:c}");
+                sb.AppendLine($"  Average: {stat.Average:c}");
             }
 
             ResultText = sb.ToString();
